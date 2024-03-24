@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -43,11 +44,24 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        $data_validate = $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'email|unique:users,email|max:255',
+            'username' => 'string|unique:users,username|required|max:255',
+            'password' => 'required|string|max:255'
+        ]);
+
         try {
-            $user = User::find($userid);
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'username' => $request->username,
+                'password' => Hash::make($request->password)
+            ]);
 
             return response()->json([
-                'message' => 'Successfully get user',
+                'message' => 'User created',
                 'data' => $user
             ]);
         } catch (Exception $err) {

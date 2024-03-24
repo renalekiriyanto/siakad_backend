@@ -9,4 +9,5 @@ Route::controller(UserController::class)
 ->group(function(){
     Route::get('/list', 'listUser');
     Route::get('/{userid}', 'getUserByUuid');
+    Route::post('/register', 'register');
 });
