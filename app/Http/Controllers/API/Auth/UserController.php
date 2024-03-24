@@ -60,9 +60,12 @@ class UserController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
+            $token = $user->createToken('siakad', ['*'], now()->addWeek())->plainTextToken;
+
             return response()->json([
                 'message' => 'User created',
-                'data' => $user
+                'token' => $token,
+                'data' => $user,
             ]);
         } catch (Exception $err) {
             return response()->json([
